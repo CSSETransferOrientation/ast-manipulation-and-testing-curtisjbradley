@@ -79,12 +79,16 @@ class BinOpAst():
                 return self.left.postfix_str() + ' ' + self.right.postfix_str() + ' ' + self.val
 
     def additive_identity(self):
-        """
-        Reduce additive identities
-        x + 0 = x
-        """
-        # IMPLEMENT ME!
-        pass
+        if self.left:
+            if self.left.type is NodeType.number and self.right.val == 0:
+                self.left = False
+            additive_identity(left)
+        if self.right:
+            if self.right.type == NodeType.number and self.right.val == 0:
+                self.right = False;
+
+            additive_identity(right)
+
                         
     def multiplicative_identity(self):
         """
