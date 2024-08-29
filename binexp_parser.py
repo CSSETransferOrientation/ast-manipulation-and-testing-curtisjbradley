@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import os
 from os.path import join as osjoin
-
 import unittest
 
 from enum import Enum
@@ -79,15 +78,10 @@ class BinOpAst():
                 return self.left.postfix_str() + ' ' + self.right.postfix_str() + ' ' + self.val
 
     def additive_identity(self):
-        if self.left:
-            if self.left.type is NodeType.number and self.right.val == 0:
-                self.left = False
-            additive_identity(left)
-        if self.right:
-            if self.right.type == NodeType.number and self.right.val == 0:
-                self.right = False;
-
-            additive_identity(right)
+        if(self == False or self.type is NodeType.number):
+            return
+        additive_identity(self.left)
+        additive_identity(self.right)
 
                         
     def multiplicative_identity(self):
@@ -130,6 +124,20 @@ class BinOpAst():
         self.multiplicative_identity()
         self.mult_by_zero()
         self.constant_fold()
+
+import unittest
+class Tester(unittest.TestCase):
+    def test_walk(self):
+        for testdir in os.listdir("testbench"):
+            for test_name in os.listdir(osjoin("testbench", testdir, "inputs")):
+                out = ""
+                with open(osjoin("testbench", testdir, "inputs", test_name)) as testinput:
+                    args = testinput.read()
+                    #out = execute
+                with open(osjoin("testbench", testdir, "outputs", test_name)) as testout:
+                    assert out == testout
+
+
 
 
 if __name__ == "__main__":
