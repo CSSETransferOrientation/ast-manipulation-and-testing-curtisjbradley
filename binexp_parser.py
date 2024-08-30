@@ -144,20 +144,7 @@ def test_folder(folder, func):
    
 class Tester(unittest.TestCase):
     def test_arithid(self):
-        for test_name in os.listdir(osjoin("testbench", "arith_id", "inputs")):
-            out = ""
-            expected = ""
-            with open(osjoin("testbench", "arith_id", "inputs", test_name)) as testinput:
-                tree = BinOpAst(testinput.read().split("\n"))
-                tree.simplify_binops()
-                out = str(tree)
-            with open(osjoin("testbench", "arith_id", "outputs", test_name)) as testout:
-                expected = testout.read()
-            try:
-                assert out == expected
-            except AssertionError:
-                print(f"Test {test_name} failed. Expected: {expected}\nReceived: {out}")
-    def test_multiid(self):
+       test_folder("arith_id", BinOpAst.additive_identity()) 
 
 
 if __name__ == "__main__":
