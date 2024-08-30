@@ -82,8 +82,17 @@ class BinOpAst():
             return
         self.left.additive_identity()
         self.right.additive_identity()
-        pass
-
+        if self.type == NodeType.operator and self.val == "+":
+            if self.left.val == "0":
+                self.type = self.right.type
+                self.val = self.right.val
+                self.right = None
+                self.left = self.left.left
+            elif self.right.val == "0":
+                self.type = self.left.type
+                self.val = self.left.val
+                self.left = None
+                self.right = self.right.right
                         
     def multiplicative_identity(self):
         """
@@ -133,19 +142,20 @@ def test_folder(folder, func):
         expected = ""
         with open(osjoin("testbench", folder, "inputs", test_name)) as testinput:
             tree = BinOpAst(testinput.read().split("\n"))
-            func(tree
+            func(tree)
             out = str(tree)
         with open(osjoin("testbench", folder, "outputs", test_name)) as testout:
             expected = testout.read()
         try:
-            assert out == expected
+            assert out.strip() == expected.strip()
         except AssertionError:
-            print(f"Test {test_name} failed. Expected: {expected}\nReceived: {out}")
+            raise Exception(f"\n{folder} - test {test_name} failed. Expected: {expected}\nReceived: {out}") 
    
 class Tester(unittest.TestCase):
     def test_arithid(self):
-       test_folder("arith_id", BinOpAst.additive_identity()) 
-
+       test_folder("arith_id", BinOpAst.additive_identity) 
+    #def test_multid(self):
+        #test_folder("mult_id", BinOpAst.multiplicative_identity)
 
 if __name__ == "__main__":
     unittest.main()
