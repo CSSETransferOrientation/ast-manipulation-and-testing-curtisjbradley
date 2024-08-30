@@ -80,8 +80,9 @@ class BinOpAst():
     def additive_identity(self):
         if(self == False or self.type is NodeType.number):
             return
-        additive_identity(self.left)
-        additive_identity(self.right)
+        self.left.additive_identity()
+        self.right.additive_identity()
+        pass
 
                         
     def multiplicative_identity(self):
@@ -125,19 +126,38 @@ class BinOpAst():
         self.mult_by_zero()
         self.constant_fold()
 
-import unittest
+
+def test_folder(folder, func):
+    for test_name in os.listdir(osjoin("testbench", folder, "inputs")):
+        out = ""
+        expected = ""
+        with open(osjoin("testbench", folder, "inputs", test_name)) as testinput:
+            tree = BinOpAst(testinput.read().split("\n"))
+            func(tree
+            out = str(tree)
+        with open(osjoin("testbench", folder, "outputs", test_name)) as testout:
+            expected = testout.read()
+        try:
+            assert out == expected
+        except AssertionError:
+            print(f"Test {test_name} failed. Expected: {expected}\nReceived: {out}")
+   
 class Tester(unittest.TestCase):
-    def test_walk(self):
-        for testdir in os.listdir("testbench"):
-            for test_name in os.listdir(osjoin("testbench", testdir, "inputs")):
-                out = ""
-                with open(osjoin("testbench", testdir, "inputs", test_name)) as testinput:
-                    args = testinput.read()
-                    #out = execute
-                with open(osjoin("testbench", testdir, "outputs", test_name)) as testout:
-                    assert out == testout
-
-
+    def test_arithid(self):
+        for test_name in os.listdir(osjoin("testbench", "arith_id", "inputs")):
+            out = ""
+            expected = ""
+            with open(osjoin("testbench", "arith_id", "inputs", test_name)) as testinput:
+                tree = BinOpAst(testinput.read().split("\n"))
+                tree.simplify_binops()
+                out = str(tree)
+            with open(osjoin("testbench", "arith_id", "outputs", test_name)) as testout:
+                expected = testout.read()
+            try:
+                assert out == expected
+            except AssertionError:
+                print(f"Test {test_name} failed. Expected: {expected}\nReceived: {out}")
+    def test_multiid(self):
 
 
 if __name__ == "__main__":
