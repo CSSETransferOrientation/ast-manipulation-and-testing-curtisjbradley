@@ -129,6 +129,17 @@ class BinOpAst():
 
     
     def constant_fold(self):
+        if (self == False or self.type is NodeType.number):
+            return
+        l = self.left
+        r = self.right
+        BinOpAst.constant_fold(l)
+        BinOpAst.constant_fold(r)
+        if (l.type == NodeType.number and r.type == NodeType.number):
+            self.val = eval(l.val + self.val + r.val)
+            self.type = NodeType.number
+            self.left = False
+            self.right = False
         """
         Fold constants,
         e.g. 1 + 2 = 3
@@ -150,6 +161,7 @@ class BinOpAst():
         self.mult_by_zero()
         self.additive_identity()
         self.multiplicative_identity()
+        self.constant_fold()
 
 def test_folder(folder, func):
     for test_name in os.listdir(osjoin("testbench", folder, "inputs")):
@@ -175,5 +187,7 @@ class Tester(unittest.TestCase):
         test_folder("combined", BinOpAst.simplify_binops)
     def test_mult_zero(self):
         test_folder("mult_by_zero", BinOpAst.mult_by_zero)
+    def test_fold(self):
+        test_folder("constant_fold", BinOpAst.constant_fold)
 if __name__ == "__main__":
     unittest.main()
