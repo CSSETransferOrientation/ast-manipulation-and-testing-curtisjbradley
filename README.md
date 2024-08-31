@@ -13,7 +13,7 @@
 **5) Combined -** *BinOpAst.simplify\_binops* runs Multiply by Zero, Arithmetic Identity, and Multiplicative Identity, in that order.
 
 
-##Reflection
+## Reflection
 
 The most valuable part of the assignment was learning more about how unit testing works. Prior to this class I had no expericence creating tests and running testing on code.
 
