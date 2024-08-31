@@ -147,11 +147,9 @@ class BinOpAst():
         3) Extra #1: Multiplication by 0, e.g. x * 0 = 0
         4) Extra #2: Constant folding, e.g. statically we can reduce 1 + 1 to 2, but not x + 1 to anything
         """
+        self.mult_by_zero()
         self.additive_identity()
         self.multiplicative_identity()
-        self.mult_by_zero()
-        self.constant_fold()
-
 
 def test_folder(folder, func):
     for test_name in os.listdir(osjoin("testbench", folder, "inputs")):
