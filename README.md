@@ -10,7 +10,9 @@
 
 **4) Multiply by Zero** - *BinOpAst.mult\_by\_zero* is able to resolve multiplications by 0.
 
-**5) Combined -** *BinOpAst.simplify\_binops* runs Multiply by Zero, Arithmetic Identity, and Multiplicative Identity, in that order.
+**5) Constant Folding** - *BinOpAst.constant_folding* will evaluate constant arithmetic. It may be unsfe as it uses eval, so I'm assuming that it has sanitized operators
+
+**6) Combined -** *BinOpAst.simplify\_binops* runs Multiply by Zero, Arithmetic Identity, Multiplicative Identity and Constant Folding, in that order.
 
 
 ## Reflection
