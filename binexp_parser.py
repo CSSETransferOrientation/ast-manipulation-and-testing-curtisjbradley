@@ -10,6 +10,8 @@ from enum import Enum
 # distinguish between the addition and multiplication operators
 NodeType = Enum('BinOpNodeType', ['number', 'operator'])
 
+op_list = ["+", "*", "-", "/"]
+
 class BinOpAst():
     """
     A somewhat quick and dirty structure to represent a binary operator AST.
@@ -23,7 +25,7 @@ class BinOpAst():
         Destroys the list that is passed in.
         """
         self.val = prefix_list.pop(0)
-        if self.val.isnumeric():
+        if self.val not in op_list:
             self.type = NodeType.number
             self.left = False
             self.right = False
@@ -135,7 +137,7 @@ class BinOpAst():
         r = self.right
         BinOpAst.constant_fold(l)
         BinOpAst.constant_fold(r)
-        if (l.type == NodeType.number and r.type == NodeType.number):
+        if (l.type == NodeType.number and r.type == NodeType.number and l.val.isnumeric() and r.val.isnumeric()):
             self.val = eval(l.val + self.val + r.val)
             self.type = NodeType.number
             self.left = False
