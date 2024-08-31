@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 import os
 from os.path import join as osjoin
 import unittest
@@ -117,12 +118,15 @@ class BinOpAst():
     
     
     def mult_by_zero(self):
-        """
-        Reduce multiplication by zero
-        x * 0 = 0
-        """
-        # Optionally, IMPLEMENT ME! (I'm pretty easy)
-        pass
+        if(self == False or self.type is NodeType.number):
+            return
+        if self.type == NodeType.operator and self.val == "*":
+            if self.left.val == "0" or self.right.val == "0":
+                self.left = False
+                self.right = False
+                self.val = "0"
+                self.type = NodeType.number
+
     
     def constant_fold(self):
         """
@@ -171,5 +175,7 @@ class Tester(unittest.TestCase):
         test_folder("mult_id", BinOpAst.multiplicative_identity)
     def test_simplify(self):
         test_folder("combined", BinOpAst.simplify_binops)
+    def test_mult_zero(self):
+        test_folder("mult_by_zero", BinOpAst.mult_by_zero)
 if __name__ == "__main__":
     unittest.main()
