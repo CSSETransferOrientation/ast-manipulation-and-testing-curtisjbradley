@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 import os
 from os.path import join as osjoin
 import unittest
@@ -80,27 +80,40 @@ class BinOpAst():
     def additive_identity(self):
         if(self == False or self.type is NodeType.number):
             return
-        self.left.additive_identity()
-        self.right.additive_identity()
+        BinOpAst.additive_identity(self.left)
+        BinOpAst.additive_identity(self.right)
         if self.type == NodeType.operator and self.val == "+":
             if self.left.val == "0":
-                self.type = self.right.type
-                self.val = self.right.val
-                self.right = None
-                self.left = self.left.left
+                r = self.right
+                self.val = r.val
+                self.type = r.type
+                self.left = r.left
+                self.right = r.right
             elif self.right.val == "0":
-                self.type = self.left.type
-                self.val = self.left.val
-                self.left = None
-                self.right = self.right.right
+                l = self.left
+                self.val = l.val
+                self.type = l.type
+                self.left = l.left
+                self.right = l.right
                         
     def multiplicative_identity(self):
-        """
-        Reduce multiplicative identities
-        x * 1 = x
-        """
-        # IMPLEMENT ME!
-        pass
+        if(self == False or self.type is NodeType.number):
+            return
+        BinOpAst.multiplicative_identity(self.left)
+        BinOpAst.multiplicative_identity(self.right)
+        if self.type == NodeType.operator and self.val == "*":
+            if self.left.val == "1":
+                r = self.right
+                self.type = r.type
+                self.val = r.val
+                self.right = r.right
+                self.left = r.left
+            elif self.right.val == "1":
+                l = self.left
+                self.type = l.type
+                self.val = l.val
+                self.left = l.left
+                self.right = l.right
     
     
     def mult_by_zero(self):
@@ -149,13 +162,14 @@ def test_folder(folder, func):
         try:
             assert out.strip() == expected.strip()
         except AssertionError:
-            raise Exception(f"\n{folder} - test {test_name} failed. Expected: {expected}\nReceived: {out}") 
+            raise Exception(f"{folder} - test {test_name} failed.\nExpected:\n{expected}\nReceived:\n{out}") 
    
 class Tester(unittest.TestCase):
     def test_arithid(self):
        test_folder("arith_id", BinOpAst.additive_identity) 
-    #def test_multid(self):
-        #test_folder("mult_id", BinOpAst.multiplicative_identity)
-
+    def test_multid(self):
+        test_folder("mult_id", BinOpAst.multiplicative_identity)
+    def test_simplify(self):
+        test_folder("combined", BinOpAst.simplify_binops)
 if __name__ == "__main__":
     unittest.main()
