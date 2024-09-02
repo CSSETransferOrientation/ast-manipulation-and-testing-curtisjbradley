@@ -83,6 +83,8 @@ class BinOpAst():
     def additive_identity(self):
         if(self == False or self.type is NodeType.number):
             return
+        # ;;> This is an odd way of doing this, the more pythonic is
+        # ;;> self.left.additive_identity()
         BinOpAst.additive_identity(self.left)
         BinOpAst.additive_identity(self.right)
         if self.type == NodeType.operator and self.val == "+":
@@ -138,6 +140,8 @@ class BinOpAst():
         BinOpAst.constant_fold(l)
         BinOpAst.constant_fold(r)
         if (l.type == NodeType.number and r.type == NodeType.number and l.val.isnumeric() and r.val.isnumeric()):
+            # ;;> Eval is generally dangerous and should be avoided.
+            # ;;> You could get some really nasty 'rm -rf /' type behavior from this
             self.val = eval(l.val + self.val + r.val)
             self.type = NodeType.number
             self.left = False
@@ -181,6 +185,7 @@ def test_folder(folder, func):
             raise Exception(f"{folder} - test {test_name} failed.\nExpected:\n{expected}\nReceived:\n{out}") 
    
 class Tester(unittest.TestCase):
+    # ;;> clever way to use function passing to get this level of abstraction!
     def test_arithid(self):
        test_folder("arith_id", BinOpAst.additive_identity) 
     def test_multid(self):

@@ -1,5 +1,7 @@
 # Binary Operator Simplifier 
 
+;;> Tests are a little sparse, but overall looks really well done!
+
 ## Completed Subtasks
 
 **1) Automated Testing** - Tests in *mult_id*, *mult_by_zero*, *combined*, and *arith_id* will run given that there is a matching output file.
